@@ -1,35 +1,31 @@
-import { Application, Assets, Sprite } from "pixi.js";
+import { Application, Container } from 'pixi.js';
+import { addMoon } from './addMoon';
+import { addStars } from './addStars';
+import { addMountains } from './addMountains';
+import { addTrees } from './addTrees';
+import { addGround } from './addGround';
+import { addTrain } from './addTrain';
+import { addSmokes } from './addSmokes';
 
+//create a PixiJS app
+const app = new Application();
+
+//create a container to hold all the train parts
+const trainContainer = new Container();
+
+// Asynchronous IIFE
 (async () => {
-  // Create a new application
-  const app = new Application();
+    //init the app
+    await app.init({ background: '#021f4b', resizeTo: window });
 
-  // Initialize the application
-  await app.init({ background: "#1099bb", resizeTo: window });
+    //append the application canvas to the document body
+    document.body.appendChild(app.canvas);
 
-  // Append the application canvas to the document body
-  document.getElementById("pixi-container")!.appendChild(app.canvas);
-
-  // Load the bunny texture
-  const texture = await Assets.load("/assets/bunny.png");
-
-  // Create a bunny Sprite
-  const bunny = new Sprite(texture);
-
-  // Center the sprite's anchor point
-  bunny.anchor.set(0.5);
-
-  // Move the sprite to the center of the screen
-  bunny.position.set(app.screen.width / 2, app.screen.height / 2);
-
-  // Add the bunny to the stage
-  app.stage.addChild(bunny);
-
-  // Listen for animate update
-  app.ticker.add((time) => {
-    // Just for fun, let's rotate mr rabbit a little.
-    // * Delta is 1 if running at 100% performance *
-    // * Creates frame-independent transformation *
-    bunny.rotation += 0.1 * time.deltaTime;
-  });
+    addStars(app);
+    addMoon(app);
+    addMountains(app);
+    addTrees(app);
+    addGround(app);
+    addTrain(app, trainContainer);
+    addSmokes(app, trainContainer);
 })();
